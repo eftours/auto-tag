@@ -30,13 +30,13 @@ If you have never used StackSets before, there are some IAM roles that are requi
 In the administrator account (the account from where you deploy your StackSets), you will need to deploy the [AWSCloudFormationStackSetAdministrationRole.yml](https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetAdministrationRole.yml). 
 
 ```bash
-aws cloudformation create-stack --template-url https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetAdministrationRole.yml --stack-name cloudformation-stack-set-admin-role --capabilities CAPABILITY_NAMED_IAM --region $REGION
+aws cloudformation create-stack --template-body file:///ABS_PATH_TO_CLONED_REPO/cloned_cf_templates/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetAdministrationRole.yml --stack-name cloudformation-stack-set-admin-role --capabilities CAPABILITY_NAMED_IAM --region $REGION
 ```
 
 In each account you plan to use StackSets (or deploy AutoTag), you will need to deploy the [AWSCloudFormationStackSetExecutionRole.yml](https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetExecutionRole.yml).
 
 ```bash
-aws cloudformation create-stack --template-url https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetExecutionRole.yml --stack-name cloudformation-stack-set-execution-role --parameters ParameterKey=AdministratorAccountId,ParameterValue=$ADMIN_ACCOUNT_ID --capabilities CAPABILITY_NAMED_IAM --region $REGION
+aws cloudformation create-stack --template-body file:///ABS_PATH_TO_CLONED_REPO/cloned_cf_templates/AWSCloudFormationStackSetExecutionRole.yml --stack-name cloudformation-stack-set-execution-role --parameters ParameterKey=AdministratorAccountId,ParameterValue=$ADMIN_ACCOUNT_ID --capabilities CAPABILITY_NAMED_IAM --region $REGION
 ```
 
 ## Installation
@@ -54,9 +54,9 @@ Deploy this stack set first in all desired accounts in a single "master" region.
 __Main StackSet__
 
 ```bash
-export REGION=ap-southeast-2 # set this to the region you plan to deploy to
+export REGION=us-east-1 # set this to the region you plan to deploy to
 aws cloudformation create-stack-set \
-  --template-url https://gorillastack-autotag-releases.s3-ap-southeast-2.amazonaws.com/templates/autotag_event_main-template.json \
+  --template-body file:///ABS_PATH_TO_CLONED_REPO/cloned_cf_templates/autotag_event_main-template.json \
   --stack-set-name AutoTag \
   --region $REGION \
   --capabilities CAPABILITY_NAMED_IAM \
@@ -81,10 +81,10 @@ After the main stack status is CREATE_COMPLETE deploy the collector stack to eac
 __Collector StackSet__
 
 ```bash
-export REGION=ap-southeast-2 # set this to the region your ^ main stack is deployed in
+export REGION=us-east-1 # set this to the region your ^ main stack is deployed in
 # first create the stack set
 aws cloudformation create-stack-set \
-  --template-url https://gorillastack-autotag-releases.s3-ap-southeast-2.amazonaws.com/templates/autotag_event_collector-template.json \
+  ----template-body file:///ABS_PATH_TO_CLONED_REPO/cloned_cf_templates/autotag_event_collector-template.json \
   --stack-set-name AutoTag-Collector \
   --region $REGION \
   --capabilities CAPABILITY_IAM \
